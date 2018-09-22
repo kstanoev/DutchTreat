@@ -1,0 +1,48 @@
+﻿button {
+	font-size: 30px;
+}
+
+input[type=submit] {
+	width: auto;
+}
+
+input, textarea {
+	font-size: 20px;
+	width: 200px;
+}
+
+label {
+	font-size: 18px;
+}
+
+#stats {
+	border: 5px solid grey;
+	width: auto;
+}
+
+	#stats #firstPikachu {
+		width: 100px;
+		height: 100px;
+	}
+
+.pokemonStats {
+	color: red;
+}
+
+/*
+ul .pokemonStats {
+	color: green;
+}*/
+
+menu li {
+	font-size: x-large;
+	display: inline;
+}
+
+	menu li::after {
+		content: " |";
+	}
+
+	menu li:last-of-type::after {
+		content: "";
+	}

@@ -1,0 +1,5 @@
+{
+	"ConnectionStrings": {
+		"PokemonConnectionString": "server=(localdb)\\ProjectsV13;Database=PokemonIndexDb;Integrated Security=true;MultipleActiveResultSets=true;"
+	}
+}

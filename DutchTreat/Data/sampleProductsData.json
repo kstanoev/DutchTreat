@@ -1,0 +1,14 @@
+[
+	{
+		"Id": 1,
+		"ImageSource": "/img/sample/pikachu.jpg",
+		"Name": "Pikachu",
+		"Attack": "35"
+	},
+	{
+		"Id": 2,
+		"ImageSource": "/img/sample/eevee.jpg",
+		"Name": "Eevee",
+		"Attack": "15"
+	}
+]

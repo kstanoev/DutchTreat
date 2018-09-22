@@ -1,0 +1,20 @@
+﻿@model ContactViewModel
+
+@{
+	ViewBag.Title = "Contact";
+}
+
+<h2>
+	@ViewBag.Title
+</h2>
+
+<form method="post">
+	<div asp-validation-summary="All"></div>
+	<label asp-for="Message">Message:</label>
+	<br />
+	<textarea rows="4" asp-for="Message"></textarea>
+	<br />
+	<input type="submit" value="Send Message" />
+	<br />
+	<div>@ViewBag.UserMessage</div>
+</form>
