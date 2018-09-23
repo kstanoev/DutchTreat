@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace DutchTreat.ViewModels
 {
-	public class OrderItemViewModel
-	{
-		public int Id { get; set; }
-		public DateTime OrderDate { get; set; }
-		public ICollection<OrderItemViewModel> Items { get; set; }
-	}
+    public class OrderItemViewModel
+    {
+        public int Id { get; set; }
+        public decimal Price { get; set; }
+    }
 }

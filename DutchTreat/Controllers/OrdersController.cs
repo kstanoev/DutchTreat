@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace DutchTreat.Controllers
 {
@@ -18,25 +19,30 @@ namespace DutchTreat.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class OrdersController : Controller
     {
-        private readonly IPokemonRepository _repository;
+        private readonly IRepository _repository;
         private readonly ILogger<OrdersController> _logger;
         private readonly IMapper _mapper;
+        private readonly UserManager<StoreUser> _userManager;
 
-        public OrdersController(IPokemonRepository repository,
+        public OrdersController(IRepository repository,
             ILogger<OrdersController> logger,
-            IMapper mapper)
+            IMapper mapper,
+            UserManager<StoreUser> userManager)
         {
             _repository = repository;
             _logger = logger;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Order>> Get()
+        public ActionResult<IEnumerable<Order>> Get(bool includeItems = true)
         {
             try
             {
-                return Ok(_mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(_repository.GetAllOrders()));
+                var username = User.Identity.Name;
+                var results = _repository.GetAllOrdersByUsername(username, includeItems);
+                return Ok(_mapper.Map<IEnumerable<Order>, IEnumerable<OrderViewModel>>(results));
             }
             catch (Exception ex)
             {
@@ -50,7 +56,8 @@ namespace DutchTreat.Controllers
         {
             try
             {
-                var product = _repository.GetOrderById(id);
+                var username = User.Identity.Name;
+                var product = _repository.GetOrderById(username, id);
                 if (product != null)
                 {
                     return Ok(_mapper.Map<Order, OrderViewModel>(product));
@@ -68,35 +75,26 @@ namespace DutchTreat.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]OrderViewModel model)
+        public async Task<IActionResult> Post([FromBody]OrderViewModel model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     var newOrder = _mapper.Map<OrderViewModel, Order>(model);
-                    //var newOrder = new Order()
-                    //{
-                    //	Id = model.OrderId,
-                    //	OrderDate = model.OrderDate
-                    //};
-
+                    
                     // Validation
                     if (newOrder.OrderDate == DateTime.MinValue)
                     {
                         newOrder.OrderDate = DateTime.Now;
                     }
 
+                    newOrder.User = await _userManager.FindByNameAsync(User.Identity.Name);
+
                     _repository.AddEntity(newOrder);
+
                     if (_repository.SaveAll())
                     {
-                        // Create VM so that communication between M and VM is two-way
-                        //var viewModel = new OrderViewModel()
-                        //{
-                        //	OrderId = newOrder.Id,
-                        //	OrderDate = newOrder.OrderDate
-                        //};
-
                         return Created($"api/orders/{newOrder.Id}", _mapper.Map<Order, OrderViewModel>(newOrder));
                     }
                 }

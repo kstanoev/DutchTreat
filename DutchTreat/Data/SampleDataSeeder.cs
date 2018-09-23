@@ -12,13 +12,13 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DutchTreat.Data
 {
-	public class PokemonSampleDataSeeder
+	public class SampleDataSeeder
 	{
-		private readonly PokemonDbContext _dbContext;
+		private readonly DbContext _dbContext;
 		private readonly IHostingEnvironment _host;
 		private readonly UserManager<StoreUser> _userManager;
 
-		public PokemonSampleDataSeeder(PokemonDbContext dbContext, IHostingEnvironment host, UserManager<StoreUser> userManager)
+		public SampleDataSeeder(DbContext dbContext, IHostingEnvironment host, UserManager<StoreUser> userManager)
 		{
 			_dbContext = dbContext;
 			_host = host;
@@ -39,8 +39,8 @@ namespace DutchTreat.Data
 					FirstName = "Kiril",
 					LastName = "Stanoev",
 					Email = "kiril.stanoev@gmail.com",
-					UserName = "kiro"
-				};
+					UserName = "kiril.stanoev@gmail.com"
+                };
 
 				var result = await _userManager.CreateAsync(user, "1234");
 
@@ -83,13 +83,14 @@ namespace DutchTreat.Data
 
 				var order = new Order() { Id = 1 };
 				order.User = user;
+			    order.OrderDate = DateTime.Now;
 				order.Items = new List<OrderItem>()
 					{
 						new OrderItem()
 						{
 							Product = products.First(),
-							Price = 123,
-							//Order = order
+							Price = new decimal(3.14),
+							Order = order
 						}
 					};
 				_dbContext.Orders.Add(order);

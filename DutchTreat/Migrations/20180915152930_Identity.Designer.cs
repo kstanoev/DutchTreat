@@ -6,10 +6,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using DbContext = DutchTreat.Data.DbContext;
 
 namespace DutchTreat.Migrations
 {
-    [DbContext(typeof(PokemonDbContext))]
+    [DbContext(typeof(DbContext))]
     [Migration("20180915152930_Identity")]
     partial class Identity
     {

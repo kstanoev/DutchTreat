@@ -4,12 +4,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
 
 namespace DutchTreat.Controllers
 {
@@ -18,21 +21,24 @@ namespace DutchTreat.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly SignInManager<StoreUser> _signInManager;
         private readonly UserManager<StoreUser> _userManager;
+        private readonly IConfiguration _config;
 
-        public AccountController(ILogger<AccountController> logger, 
+        public AccountController(ILogger<AccountController> logger,
             SignInManager<StoreUser> signInManager,
-            UserManager<StoreUser> userManager)
+            UserManager<StoreUser> userManager,
+            IConfiguration config)
         {
             _logger = logger;
             _signInManager = signInManager;
             _userManager = userManager;
+            _config = config;
         }
 
         public IActionResult Login()
         {
             if (this.User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "PokemonIndex");
+                return RedirectToAction("Index", "App");
             }
             return View();
         }
@@ -53,7 +59,7 @@ namespace DutchTreat.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Shop", "PokemonIndex");
+                        return RedirectToAction("Shop", "App");
                     }
                 }
             }
@@ -67,7 +73,7 @@ namespace DutchTreat.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "PokemonIndex");
+            return RedirectToAction("Index", "App");
         }
 
 
@@ -78,15 +84,38 @@ namespace DutchTreat.Controllers
             {
                 var user = await _userManager.FindByNameAsync(model.Username);
                 var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
                     // Create the token
+                    var handler = new JwtSecurityTokenHandler();
+                    ClaimsIdentity identity = new ClaimsIdentity(
+                        new GenericIdentity(user.Email, "Token"));
+
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
+                    var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                    var token = handler.CreateToken(new SecurityTokenDescriptor
+                    {
+                        Issuer = _config["Tokens:Issuer"],
+                        Audience = _config["Tokens:Audience"],
+                        SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256),
+                        Subject = identity,
+                        Expires = DateTime.Now.Add(TimeSpan.FromDays(1)),
+                        NotBefore = DateTime.Now
+                    });
                     var claims = new[]
                     {
                         new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                         new Claim(JwtRegisteredClaimNames.Jti, new Guid().ToString()),
                         new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
                     };
+
+                    var results = new
+                    {
+                        token = handler.WriteToken(token),
+                        expiration = token.ValidTo
+                    };
+
+                    return Created("", results.token);
                 }
             }
 

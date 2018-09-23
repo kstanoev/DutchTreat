@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DutchTreat.Data
 {
-	public class PokemonDbContext : IdentityDbContext<StoreUser>
+	public class DbContext : IdentityDbContext<StoreUser>
 	{
-		public PokemonDbContext(DbContextOptions<PokemonDbContext> options)
+		public DbContext(DbContextOptions<DbContext> options)
 			: base(options)
 		{
 

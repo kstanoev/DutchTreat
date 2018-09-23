@@ -14,7 +14,7 @@ namespace DutchTreat.Data
 		public MappingProfile()
 		{
 			CreateMap<Order, OrderViewModel>()
-				.ForMember(destinationVM => destinationVM.OrderId,
+				.ForMember(destinationViewMap => destinationViewMap.OrderId,
 					mapper => mapper.MapFrom(sourceModel => sourceModel.Id))
 				.ReverseMap();
 

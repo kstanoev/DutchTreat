@@ -15,10 +15,10 @@ namespace DutchTreat.Controllers
 	[Produces("application/json")]
 	public class ProductsController : Controller
 	{
-		private readonly IPokemonRepository _repository;
+		private readonly IRepository _repository;
 		private readonly ILogger<ProductsController> _logger;
 
-		public ProductsController(IPokemonRepository repository, ILogger<ProductsController> logger)
+		public ProductsController(IRepository repository, ILogger<ProductsController> logger)
 		{
 			_repository = repository;
 			_logger = logger;

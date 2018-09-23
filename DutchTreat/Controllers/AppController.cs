@@ -14,12 +14,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DutchTreat.Controllers
 {
-	public class PokemonIndexController : Controller
+	public class AppController : Controller
 	{
 		private readonly IMessageService messageService;
-		private readonly IPokemonRepository _dbRepository;
+		private readonly IRepository _dbRepository;
 
-        public PokemonIndexController(IMessageService messageService, IPokemonRepository dbRepository)
+        public AppController(IMessageService messageService, IRepository dbRepository)
 		{
 			this.messageService = messageService;
 			_dbRepository = dbRepository;

@@ -5,10 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using DbContext = DutchTreat.Data.DbContext;
 
 namespace DutchTreat.Migrations
 {
-    [DbContext(typeof(PokemonDbContext))]
+    [DbContext(typeof(DbContext))]
     partial class PokemonDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
