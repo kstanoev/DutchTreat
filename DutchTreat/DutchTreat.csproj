@@ -2,11 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\ts\**" />
+    <Content Remove="wwwroot\ts\**" />
+    <EmbeddedResource Remove="wwwroot\ts\**" />
+    <None Remove="wwwroot\ts\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Remove="wwwroot\favicon2.ico" />
     <Content Remove="wwwroot\index.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="webpack.config.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +57,18 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\img\sample\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\ts\main.js" />
+    <None Include="wwwroot\ts\main.js.map" />
+    <None Include="wwwroot\ts\storecustomer.js" />
+    <None Include="wwwroot\ts\storecustomer.js.map" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\ts\main.ts" />
+    <TypeScriptCompile Include="wwwroot\ts\storecustomer.ts" />
   </ItemGroup>
 
 </Project>

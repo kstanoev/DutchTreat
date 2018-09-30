@@ -1,11 +1,14 @@
 ﻿@model IEnumerable<Product>
-
+@section scripts {
+    <script src="~/ts/storecustomer.js"></script>
+    <script src="~/ts/main.js"></script>
+}
 <h1>Shop</h1>
 <p>Count: @Model.Count()</p>
 @foreach (var product in Model)
 {
-	<li><img src="@product.ImageSource" /></li>
-	<li>@product.Name</li>
-	<li>@product.Attack</li>
-	<br />
+    <li><img src="@product.ImageSource" /></li>
+    <li>@product.Name</li>
+    <li>@product.Attack</li>
+    <br />
 }

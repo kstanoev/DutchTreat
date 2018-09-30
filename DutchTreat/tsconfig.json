@@ -1,0 +1,13 @@
+{
+  "include": [ "wwwroot/ts/**/*.ts" ],
+  "compilerOptions": {
+    "target": "es5",
+    "sourceMap": true
+  },
+  "compileOnSave": true,
+  "lib": [
+    "es2015",
+    "es5",
+    "dom"
+  ]
+}
